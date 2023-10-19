@@ -1,0 +1,27 @@
+version: '3.9'
+
+services:
+  microservice1_web:
+    build:
+      context: ./microservice1
+    volumes:
+      - .:/microservice1/
+    depends_on:
+      - rabbitmq
+    ports:
+      - 8000:8000
+
+  worker:
+    build:
+      context: ./microservice2
+    depends_on:
+      - rabbitmq
+
+  rabbitmq:
+    image: "rabbitmq:3.11.5-management"
+    ports:
+      - 15672:15672
+      - 5672:5672
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
